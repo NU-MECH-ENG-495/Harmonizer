@@ -1,18 +1,14 @@
 ### Project Idea
 
-This project will be centered around the idea of controlling servo motors with C++ to build a simple catapult.
-The focus will be on the control, and as such the hardware will be very simiple. It will involve one servo on the bottom
-to spin a small platform as a way to aim and another to pull the launch arm back. These together should provide a rudamentry
-but interesting setup to controll through C++. Once a basic hardwarre and control system is established I would like to integrate
-speach to text into the project to give commands to the catapult through voice.
+This project will be centered around the idea of controlling servo motors with C++ to accurately play songs with an instrument.
+The application will be able to parse an input song of your choice, I will start with .mp3 files but would like to eventually scrape the
+audio data off of youtube. With the audio input, I will conduct audio analysis to find the timing of different notes being played and use this
+as the control scheme for a series of servo moters to play an instrument. A basic approach to this will be to use a stepper motor, an air pump, and
+a harmonica. The motor will be able to move the harmonica to play the appropriate note as determined from the audio.
 
-As this is a C++ project, beyond the basic hardware I intend to put most of the project effort into the control code.
-I would like to write an API interface to control the servo setup and then write a seperate application to interface with these classes
-to program various voice commands.
-
-### Whisper C++
-https://github.com/ggerganov/whisper.cpp
+### Essentia
+https://github.com/MTG/essentia/blob/b8c49d08546952af15c57c9d1a14dc4945a88cf6/src/examples/streaming_extractor_music.cpp
 
 ### Hardware
-Something ratty like this
-https://www.reddit.com/r/ArduinoProjects/comments/k3w2kr/my_robotic_catapult_prototype/
+https://a.co/d/6wJqcA5
+https://a.co/d/eDTXbsJ
