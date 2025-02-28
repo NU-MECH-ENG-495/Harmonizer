@@ -6,22 +6,19 @@
 #include <chrono>
 #include <thread>
 #include "MidiFile.h"
+#include "HarmonicaMapping.h"
 
 using namespace LibSerial;
 using namespace std;
 using namespace smf;
 
-void moveTo (const int& pos, SerialPort& port);
+void writeSerial (const int& pos, SerialPort& port);
 void readPort (SerialPort& port);
 int stepCheck(SerialPort& port);
+void displayMidi(MidiFile& midifile);
 
 int main() {
-    map<int, int> notesToPosition;
-
-    notesToPosition[62] = 0;
-    notesToPosition[67] = 2;
-    notesToPosition[71] = 3;
-    notesToPosition[74] = 4;
+    HarmonicaMapping harmonica;
 
     SerialPort serial_port;
     std::string port_name = "/dev/ttyACM0";
@@ -40,27 +37,29 @@ int main() {
     midifile.doTimeAnalysis();
     midifile.linkNotePairs();
 
+    displayMidi(midifile);
+
     int tracks = midifile.getTrackCount();
     cout << "TPQ: " << midifile.getTicksPerQuarterNote() << endl;
-    if (tracks > 1) cout << "TRACKS: " << tracks << endl;
     for (int track=0; track<tracks; track++) {
-        if (tracks > 1) cout << "\nTrack " << track << endl;
-        cout << "Tick\tSeconds\tDur\tMessage" << endl;
 
         // Go through events for track, move to position if its a NOTE ON
         for (int event=0; event<midifile[track].size(); event++) {
-            cout << dec << midifile[track][event].tick;
-            cout << '\t' << dec << midifile[track][event].seconds;
-            cout << '\t';
             if (midifile[track][event].isNoteOn()) {
                 double noteDuration = midifile[track][event].getDurationInSeconds();
-                cout << noteDuration;
-                cout << '\t';
                 int note = midifile[track][event].getKeyNumber();
-                cout << note;
+
+                cout << "Playing Note: " << note << " for " << noteDuration << "seconds." << endl;
 
                 //Send motor to position
-                moveTo(notesToPosition[note], serial_port);
+                writeSerial(harmonica.getHoleNumber(note), serial_port);
+
+                //Returns when action is completed
+                readPort(serial_port);
+
+                //Set blow or draw
+                writeSerial(harmonica.getAction(note), serial_port);
+                readPort(serial_port);
 
                 //Sleep for duration of note
                 this_thread::sleep_for(chrono::duration<double>(noteDuration));
@@ -68,20 +67,29 @@ int main() {
             cout << endl;
         }
     }
-    // int check = stepCheck(serial_port);
-    // if (check == 1) {
-    //     return check;
-    // }
+    int check = stepCheck(serial_port);
+    if (check == 1) {
+        return check;
+    }
     return 0;
 }
 
 int stepCheck(SerialPort& port) {
     try {
-        for (int i = 0; i < 13; i++){
-            moveTo(i, port);
+        for (int i = 0; i < 10; i++){
+            writeSerial(i, port);
+            readPort(port);
+
+            writeSerial(1000, port);
+            readPort(port);
+
+            writeSerial(1001, port);
             readPort(port);
         }
-        moveTo(0, port);
+        writeSerial(0, port);
+        readPort(port);
+
+        writeSerial(1000, port);
         readPort(port);
         return 0;
     } catch (const std::runtime_error &e) {
@@ -90,7 +98,7 @@ int stepCheck(SerialPort& port) {
     }
 }
 
-void moveTo (const int& pos, SerialPort& port) {
+void writeSerial (const int& pos, SerialPort& port) {
     std::string data_to_send = std::to_string(pos) + "\n";
     port.Write(data_to_send);
 }
@@ -109,6 +117,27 @@ void readPort (SerialPort& port) {
         for (size_t i = 0 ; i < read_buffer.size() ; i++)
         {
             std::cout << read_buffer.at(i) << std::flush ;
+        }
+    }
+}
+
+void displayMidi (MidiFile& midifile) {
+    int tracks = midifile.getTrackCount();
+    cout << "TPQ: " << midifile.getTicksPerQuarterNote() << endl;
+    if (tracks > 1) cout << "TRACKS: " << tracks << endl;
+    for (int track=0; track<tracks; track++) {
+        if (tracks > 1) cout << "\nTrack " << track << endl;
+        cout << "Tick\tSeconds\tDur\tMessage" << endl;
+        for (int event=0; event<midifile[track].size(); event++) {
+            cout << dec << midifile[track][event].tick;
+            cout << '\t' << dec << midifile[track][event].seconds;
+            cout << '\t';
+            if (midifile[track][event].isNoteOn())
+            cout << midifile[track][event].getDurationInSeconds();
+            cout << '\t' << hex;
+            for (int i=0; i<midifile[track][event].size(); i++)
+            cout << (int)midifile[track][event][i] << ' ';
+            cout << endl;
         }
     }
 }
