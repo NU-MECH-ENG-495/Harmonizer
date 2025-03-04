@@ -10,10 +10,9 @@
 
 class HarmonicaPlayer {
 public:
-    HarmonicaPlayer(SerialCommunication& serial, HarmonicaMapping& harmonica, MidiHandler& midiHandler)
-        : serialComm(serial), harmonica(harmonica), midiHandler(midiHandler) {}
+    HarmonicaPlayer(SerialCommunication& serial, HarmonicaMapping& harmonica, MidiHandler& midiHandler);
 
-    void play() {}
+    void play();
 
 private:
     SerialCommunication& serialComm;

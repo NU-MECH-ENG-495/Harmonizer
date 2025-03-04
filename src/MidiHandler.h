@@ -9,11 +9,11 @@ using namespace std;
 
 class MidiHandler {
 public:
-    MidiHandler(const std::string& file_path) {}
+    MidiHandler(const std::string& file_path);
 
-    void display() const {}
+    void display() const;
 
-    MidiFile& getMidiFile() {}
+    MidiFile& getMidiFile();
 
 private:
     MidiFile midifile;

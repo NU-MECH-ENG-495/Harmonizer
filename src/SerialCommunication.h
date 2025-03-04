@@ -10,11 +10,11 @@ using namespace LibSerial;
 
 class SerialCommunication {
 public:
-    SerialCommunication(const std::string& port_name) {}
+    SerialCommunication(const std::string& port_name);
 
-    void write(const int& pos) {}
+    void write(const int& pos);
 
-    void read() {}
+    void read();
 
 private:
     SerialPort serial_port;
