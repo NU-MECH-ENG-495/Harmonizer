@@ -6,23 +6,33 @@ HarmonicaMapping::HarmonicaMapping() {
     // Populate the hole_map and action_map with correct MIDI numbers and corresponding hole/action
     hole_map[60] = 0;  action_map[60] = 1000;  note_name_map[60] = "C4";  // C4 (Blow, Hole 0)
     hole_map[62] = 0;  action_map[62] = 1001;  note_name_map[62] = "D4";  // D4 (Draw, Hole 0)
+
     hole_map[64] = 1;  action_map[64] = 1000;  note_name_map[64] = "E4";  // E4 (Blow, Hole 1)
     hole_map[65] = 1;  action_map[65] = 1001;  note_name_map[65] = "F4";  // F4 (Draw, Hole 1)
+
     hole_map[67] = 2;  action_map[67] = 1000;  note_name_map[67] = "G4";  // G4 (Blow, Hole 2)
     hole_map[69] = 2;  action_map[69] = 1001;  note_name_map[69] = "A4";  // A4 (Draw, Hole 2)
+
     hole_map[72] = 3;  action_map[72] = 1000;  note_name_map[72] = "C5";  // C5 (Blow, Hole 3)
     hole_map[71] = 3;  action_map[71] = 1001;  note_name_map[71] = "B4";  // B4 (Draw, Hole 3)
+
     hole_map[76] = 4;  action_map[76] = 1000;  note_name_map[76] = "E5";  // E5 (Blow, Hole 4)
     hole_map[74] = 4;  action_map[74] = 1001;  note_name_map[74] = "D5";  // D5 (Draw, Hole 4)
+
     hole_map[79] = 5;  action_map[79] = 1000;  note_name_map[79] = "G5";  // G5 (Blow, Hole 5)
     hole_map[77] = 5;  action_map[77] = 1001;  note_name_map[77] = "F5";  // F5 (Draw, Hole 5)
+
     hole_map[84] = 6;  action_map[84] = 1000;  note_name_map[84] = "C6";  // C6 (Blow, Hole 6)
     hole_map[83] = 6;  action_map[83] = 1001;  note_name_map[83] = "B5";  // B5 (Draw, Hole 6)
+
     hole_map[88] = 7;  action_map[88] = 1000;  note_name_map[88] = "E6";  // E6 (Blow, Hole 7)
     hole_map[86] = 7;  action_map[86] = 1001;  note_name_map[86] = "D6";  // D6 (Draw, Hole 7)
+
     hole_map[91] = 8;  action_map[91] = 1000;  note_name_map[91] = "G6";  // G6 (Blow, Hole 8)
     hole_map[89] = 8;  action_map[89] = 1001;  note_name_map[89] = "F6";  // F6 (Draw, Hole 8)
+
     hole_map[96] = 9;  action_map[96] = 1000;  note_name_map[96] = "C7";  // C7 (Blow, Hole 9)
+    hole_map[94] = 9;  action_map[94] = 1001;  note_name_map[94] = "A6";  // A6 (Draw, Hole 9)
 }
 
 

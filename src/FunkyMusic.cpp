@@ -9,9 +9,11 @@ int stepCheck(SerialCommunication& serialComm) {
 
             serialComm.write(1000);
             serialComm.read();
+            std::this_thread::sleep_for(std::chrono::duration<double>(0.5));
 
             serialComm.write(1001);
             serialComm.read();
+            std::this_thread::sleep_for(std::chrono::duration<double>(0.5));
         }
         serialComm.write(0);
         serialComm.read();
@@ -25,23 +27,27 @@ int stepCheck(SerialCommunication& serialComm) {
     }
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     try {
         std::string port_name = "/dev/ttyACM0";
         SerialCommunication serialComm(port_name);
-        MidiHandler midiHandler("./newTaps.mid");
         HarmonicaMapping harmonica;
 
-        midiHandler.display();
-        HarmonicaPlayer player(serialComm, harmonica, midiHandler);
-        player.play();
-
-        int check = stepCheck(serialComm);
-        if (check == 1) {
-            return check;
+        // If given a file name, play that file. Otherwise do calibration.
+        if (argc == 2) {
+            MidiHandler midiHandler(argv[1]);
+            midiHandler.display();
+            HarmonicaPlayer player(serialComm, harmonica, midiHandler);
+            player.play();
+        } else {
+            int check = stepCheck(serialComm);
+            if (check == 1) {
+                return check;
+            }
         }
         return 0;
     } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
 }
