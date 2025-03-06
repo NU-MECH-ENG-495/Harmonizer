@@ -12,7 +12,7 @@ void HarmonicaPlayer::play() {
                 double noteDuration = midiHandler.getMidiFile()[track][event].getDurationInSeconds();
                 int note = midiHandler.getMidiFile()[track][event].getKeyNumber();
 
-                std::cout << "Playing Note: " << note << " for " << noteDuration << " seconds." << std::endl;
+                std::cout << "Playing Note: " << std::dec << note << " for " << noteDuration << " seconds." << std::endl;
 
                 // Send motor to position
                 serialComm.write(harmonica.getHoleNumber(note));
@@ -25,7 +25,6 @@ void HarmonicaPlayer::play() {
                 // Sleep for the duration of the note
                 std::this_thread::sleep_for(std::chrono::duration<double>(noteDuration));
             }
-            std::cout << std::endl;
         }
     }
 }
