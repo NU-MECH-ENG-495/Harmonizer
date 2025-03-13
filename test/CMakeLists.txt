@@ -13,6 +13,11 @@ set(SOURCES ${TEST_SOURCES})
 
 add_executable(music_test ${TEST_SOURCES})
 
+enable_testing()
+
 add_test(NAME music_test COMMAND music_test)
 
 target_link_libraries(music_test PUBLIC music_lib gtest gmock)
+
+include(GoogleTest)
+gtest_discover_tests(music_test)
