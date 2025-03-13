@@ -15,9 +15,11 @@ SoftwareSerial soft_serial(RX_PIN, TX_PIN);
 
 const uint8_t STEP_PIN = 4;
 const uint8_t DIRECTION_PIN = 3;
-const uint32_t STEP_COUNT = 48000;
-const uint32_t STEP_PER_SCALE = STEP_COUNT / 12;
-const uint16_t HALF_STEP_DURATION_MICROSECONDS = 5;
+const uint8_t MOF1 = 9;
+const uint8_t MOF2 = 10;
+
+const uint32_t STEP_PER_SCALE = 2300;
+const uint16_t HALF_STEP_DURATION_MICROSECONDS = 20;
 const uint16_t STOP_DURATION = 1000;
 // current values may need to be reduced to prevent overheating depending on
 // specific motor and power supply voltage
@@ -41,6 +43,11 @@ void setup()
 
   pinMode(STEP_PIN, OUTPUT);
   pinMode(DIRECTION_PIN, OUTPUT);
+  pinMode(MOF1, OUTPUT);
+  pinMode(MOF2, OUTPUT);
+
+  digitalWrite(MOF1, 1);
+  digitalWrite(MOF2, 0);
 
   stepper_driver.setRunCurrent(RUN_CURRENT_PERCENT);
   stepper_driver.enableCoolStep();
@@ -50,18 +57,16 @@ void setup()
 void loop()
 {
   recvWithEndMarker();
-  stepFromPosition(position, newPosition);
-  position = newPosition;
 }
 
 void stepFromPosition(int from, int to) {
   int shift = 0;
   if (to > from) {
     shift = to - from;
-    digitalWrite(DIRECTION_PIN, 1);
+    digitalWrite(DIRECTION_PIN, 0);
   } else {
     shift = from - to;
-    digitalWrite(DIRECTION_PIN, 0);
+    digitalWrite(DIRECTION_PIN, 1);
   }
 
   for (uint32_t i=0; i<STEP_PER_SCALE*2*shift; ++i)
@@ -81,9 +86,23 @@ void recvWithEndMarker() {
       }
       // if you get a newline, print the string, then the string's value:
       if (inChar == '\n') {
-        Serial.print("Going to step:");
-        Serial.println(inString.toInt());
         newPosition = inString.toInt();
+
+        if (newPosition > -1 && newPosition < 10) {
+          stepFromPosition(position, newPosition);
+          position = newPosition;
+
+          Serial.print("Arrived at step: ");
+          Serial.println(position);
+        } else if (newPosition == 1001) {
+          digitalWrite(MOF1, 0);
+          digitalWrite(MOF2, 1);
+          Serial.println("Closed");
+        } else if (newPosition == 1000) {
+          digitalWrite(MOF1, 1);
+          digitalWrite(MOF2, 0);
+          Serial.println("Opened");
+        }
         // clear the string for new input:
         inString = "";
       }
