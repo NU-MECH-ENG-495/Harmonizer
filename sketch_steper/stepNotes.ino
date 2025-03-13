@@ -46,7 +46,7 @@ void setup()
   pinMode(MOF1, OUTPUT);
   pinMode(MOF2, OUTPUT);
 
-  digitalWrite(MOF1, 1);
+  digitalWrite(MOF1, 0);
   digitalWrite(MOF2, 0);
 
   stepper_driver.setRunCurrent(RUN_CURRENT_PERCENT);
@@ -89,6 +89,8 @@ void recvWithEndMarker() {
         newPosition = inString.toInt();
 
         if (newPosition > -1 && newPosition < 10) {
+          digitalWrite(MOF1, 0);
+          digitalWrite(MOF2, 0);
           stepFromPosition(position, newPosition);
           position = newPosition;
 

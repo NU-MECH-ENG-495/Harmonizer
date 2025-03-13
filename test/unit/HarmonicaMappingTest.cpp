@@ -4,10 +4,6 @@
 class HarmonicaTest : public ::testing::Test {
 protected:
     HarmonicaMapping harmonica;
-
-    void SetUp() override {
-        // Initialize the harmonica or mock its behavior if needed
-    }
 };
 
 TEST_F(HarmonicaTest, GetHoleNumber) {

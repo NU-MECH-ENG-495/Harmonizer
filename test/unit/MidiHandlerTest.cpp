@@ -6,10 +6,6 @@ protected:
     MidiHandler midiHandler;
 
     MidiHandlerTest() : midiHandler("./newTaps.mid") {}
-
-    void SetUp() override {
-        // Assuming the file exists and can be loaded.
-    }
 };
 
 TEST_F(MidiHandlerTest, MidiFileLoaded) {

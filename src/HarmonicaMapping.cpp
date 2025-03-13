@@ -1,9 +1,32 @@
+/**
+ * @file HarmonicaMapping.cpp
+ * @brief This file contains the implementation of the HarmonicaMapping class, 
+ *        which maps MIDI notes to corresponding hole numbers, actions, and note names 
+ *        for a harmonica.
+ * 
+ * The class contains methods to map MIDI numbers to hole numbers, action types (Blow/Draw),
+ * and note names, as well as a helper function to get the closest mapping for a given MIDI number.
+ * 
+ * @author Joseph Blom
+ * @date March 2025
+ */
+
 #include "HarmonicaMapping.h"
 #include <iostream>
 
-// Constructor to initialize the maps with the harmonica note-to-MIDI mappings
+/**
+ * @brief Constructor that initializes the MIDI-to-harmonica mappings.
+ * 
+ * The constructor populates three maps: `hole_map`, `action_map`, and `note_name_map`.
+ * These maps associate each MIDI note (represented by MIDI numbers) to:
+ * - a corresponding hole number on the harmonica,
+ * - an action type (either 1000 for Blow or 1001 for Draw),
+ * - and a human-readable note name (e.g., "C4").
+ * 
+ * The constructor sets mappings for several harmonica notes, from "C4" to "C7".
+ */
 HarmonicaMapping::HarmonicaMapping() {
-    // Populate the hole_map and action_map with correct MIDI numbers and corresponding hole/action
+    // Populate the hole_map, action_map, and note_name_map with correct MIDI numbers and corresponding hole/action
     hole_map[60] = 0;  action_map[60] = 1000;  note_name_map[60] = "C4";  // C4 (Blow, Hole 0)
     hole_map[62] = 0;  action_map[62] = 1001;  note_name_map[62] = "D4";  // D4 (Draw, Hole 0)
 
@@ -35,8 +58,17 @@ HarmonicaMapping::HarmonicaMapping() {
     hole_map[93] = 9;  action_map[93] = 1001;  note_name_map[93] = "A6";  // A6 (Draw, Hole 9)
 }
 
-
-// Helper function to get the closest value from a given map
+/**
+ * @brief A helper function to retrieve the closest entry for a given MIDI number from a map.
+ * 
+ * This template function looks for the exact MIDI number in the provided map. If the exact match 
+ * is not found, it returns the value corresponding to the closest MIDI number, either higher or lower.
+ * 
+ * @param map The map to search through (either hole_map, action_map, or note_name_map).
+ * @param midiNumber The MIDI number for which we want to find the closest mapping.
+ * 
+ * @return The value from the map corresponding to the closest MIDI number.
+ */
 template <typename T>
 T HarmonicaMapping::getClosestEntry(const std::map<int, T>& map, int midiNumber) const {
     // Try to find the exact MIDI number
@@ -46,7 +78,6 @@ T HarmonicaMapping::getClosestEntry(const std::map<int, T>& map, int midiNumber)
     }
 
     // If the exact MIDI number is not found, find the closest key
-    // Use lower_bound to find the first element that is not less than midiNumber
     auto lower = map.lower_bound(midiNumber);
 
     if (lower == map.begin()) {
@@ -68,23 +99,54 @@ T HarmonicaMapping::getClosestEntry(const std::map<int, T>& map, int midiNumber)
     }
 }
 
-// Get the hole number for a given MIDI number
+/**
+ * @brief Get the hole number corresponding to a given MIDI number.
+ * 
+ * This method looks up the hole number in the `hole_map` for the closest matching MIDI number.
+ * 
+ * @param midiNumber The MIDI number to search for.
+ * 
+ * @return The hole number corresponding to the given MIDI number.
+ */
 int HarmonicaMapping::getHoleNumber(int midiNumber) const {
     return getClosestEntry(hole_map, midiNumber);
 }
 
-// Get the action (1000 (Blow) or 1001 (Draw)) for a given MIDI number
+/**
+ * @brief Get the action (1000 for Blow, 1001 for Draw) corresponding to a given MIDI number.
+ * 
+ * This method looks up the action in the `action_map` for the closest matching MIDI number.
+ * 
+ * @param midiNumber The MIDI number to search for.
+ * 
+ * @return The action (1000 for Blow, 1001 for Draw) corresponding to the given MIDI number.
+ */
 int HarmonicaMapping::getAction(int midiNumber) const {
     return getClosestEntry(action_map, midiNumber);
 }
 
-// Get the note name for a given MIDI number
+/**
+ * @brief Get the note name corresponding to a given MIDI number.
+ * 
+ * This method looks up the note name in the `note_name_map` for the closest matching MIDI number.
+ * 
+ * @param midiNumber The MIDI number to search for.
+ * 
+ * @return The note name (e.g., "C4", "D4", etc.) corresponding to the given MIDI number.
+ */
 std::string HarmonicaMapping::getNoteName(int midiNumber) const {
     return getClosestEntry(note_name_map, midiNumber);
 }
 
-
-// Print all MIDI numbers, hole numbers, and actions
+/**
+ * @brief Print all MIDI numbers, their corresponding hole numbers, actions, and note names.
+ * 
+ * This method prints a human-readable list of all the MIDI-to-harmonica mappings in the form of:
+ * - MIDI number
+ * - Hole number
+ * - Action (1000 for Blow, 1001 for Draw)
+ * - Note name (e.g., "C4", "D4")
+ */
 void HarmonicaMapping::printMappings() const {
     std::cout << "\nMIDI Numbers and their Hole numbers and Actions:\n";
     for (const auto& entry : hole_map) {
