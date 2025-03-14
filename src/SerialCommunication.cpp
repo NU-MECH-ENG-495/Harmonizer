@@ -67,7 +67,7 @@ void SerialCommunication::read() {
     } catch (const ReadTimeout&) {
         // When the read operation times out, print the contents of the buffer
         for (size_t i = 0; i < read_buffer.size(); i++) {
-            std::cout << read_buffer.at(i) << std::flush;
+            // std::cout << read_buffer.at(i) << std::flush;
         }
     }
 }

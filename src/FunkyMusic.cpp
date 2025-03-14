@@ -30,12 +30,12 @@ int stepCheck(SerialCommunication& serialComm) {
             serialComm.write(i);
             serialComm.read();
 
-            serialComm.write(1000);
-            serialComm.read();
-            std::this_thread::sleep_for(std::chrono::duration<double>(0.5));
+            // serialComm.write(1000);
+            // serialComm.read();
+            // std::this_thread::sleep_for(std::chrono::duration<double>(0.5));
 
-            serialComm.write(1001);
-            serialComm.read();
+            // serialComm.write(1001);
+            // serialComm.read();
             std::this_thread::sleep_for(std::chrono::duration<double>(0.5));
         }
 

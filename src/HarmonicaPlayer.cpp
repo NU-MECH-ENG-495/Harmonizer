@@ -52,7 +52,7 @@ void HarmonicaPlayer::play() {
                 double noteDuration = midiHandler.getMidiFile()[track][event].getDurationInSeconds();
                 int note = midiHandler.getMidiFile()[track][event].getKeyNumber();
 
-                std::cout << "Playing Note: " << std::dec << note << " for " << noteDuration << " seconds." << std::endl;
+                // std::cout << "Playing Note: " << std::dec << note << " for " << noteDuration << " seconds." << std::endl;
 
                 // Send the corresponding hole number to the harmonica via serial communication
                 serialComm.write(harmonica.getHoleNumber(note));
@@ -60,6 +60,11 @@ void HarmonicaPlayer::play() {
 
                 // Send the corresponding action (Blow or Draw) to the harmonica via serial communication
                 serialComm.write(harmonica.getAction(note));
+                if(harmonica.getAction(note) == 1000) {
+                    std::cout << "BLOW " << noteDuration << std::endl;
+                } else {
+                    std::cout << "DRAW " << noteDuration << std::endl;
+                }
                 serialComm.read();
 
                 // Sleep for the duration of the note
