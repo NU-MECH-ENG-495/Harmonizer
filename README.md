@@ -1,7 +1,7 @@
-# Funky Music
+# Harmonizer
 
 ## Overview
-This Funky Music application is a program that interacts with a harmonica device over serial communication. It can play a MIDI file through the device as well as check the hardware calibration if no file is provided.
+This Harmonizer application is a program that interacts with a harmonica device over serial communication. It can play a MIDI file through the device as well as check the hardware calibration if no file is provided.
 
 ## Requirements
 Libserial
